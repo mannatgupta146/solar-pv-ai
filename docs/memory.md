@@ -56,7 +56,7 @@ solar-pv-ai/
 │   ├── 05_shap_analysis.ipynb (Verified)
 │   └── 06_economic_analysis.ipynb (Verified)
 ├── src/
-│   ├── weather.py (Weather forecast module)
+│   ├── weather.py (Weather forecast & Any-Location Indian City Geocoding engine with POPULAR_INDIAN_CITIES alias map)
 │   ├── forecasting.py (Hourly & 7-day forecast engine)
 │   ├── risk_engine.py (14-system health matrix)
 │   ├── recommendations.py (AI decision recommendation engine)
@@ -76,4 +76,15 @@ solar-pv-ai/
 │   ├── metrics/model_metrics.csv
 │   └── predictions/predictions.csv
 └── requirements.txt
+
+---
+
+## Geocoding & UI Aesthetic Specifications
+- **Indian City Geocoding Engine (`src/weather.py`)**:
+  - Integrated `POPULAR_INDIAN_CITIES` pre-indexed lookup map ensuring accurate state and lat/lon mapping for major Indian solar hubs (e.g. `Gurgaon` / `Gurugram` -> **Haryana**, `Bangalore` -> **Karnataka**, `Mumbai` -> **Maharashtra**, `Kochi` -> **Kerala**, `Shimla` -> **Himachal Pradesh**, `Pune` -> **Maharashtra**, `Jaipur` -> **Rajasthan**, `Patna` -> **Bihar**, `Delhi` -> **Delhi**, `Hyderabad` -> **Telangana**, `Chennai` -> **Tamil Nadu**, `Kolkata` -> **West Bengal**, `Ahmedabad` -> **Gujarat**).
+  - Implemented population-weighted sorting for Open-Meteo geocoding fallback queries to prevent homonym small-village misclassification.
+- **Visual Design System (`frontend/src/App.tsx`)**:
+  - Warm solar golden yellow accent scheme (`amber-400` / `hover:amber-300`).
+  - Rock-solid zero-shake layout (`h-screen overflow-hidden` container with dedicated inner `overflow-y-auto` scroll canvas).
+  - Proportional typography (`text-2xl font-bold` for KPI metrics, single-line card badges).
 ```

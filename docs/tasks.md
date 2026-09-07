@@ -46,3 +46,10 @@
 - [x] Expose new REST endpoints (`GET /api/today`, `/api/forecast`, `/api/system-health`, `/api/attribution`, `/api/revenue`) in `api/main.py`
 - [x] Upgrade React web frontend (`frontend/src/App.tsx`) with **Today Brief**, **Weather Forecast**, and **14-System Health Matrix** views
 - [x] Update project documentation (`PRD.md`, `README.md`, `tech_stack.md`, `memory.md`, `tasks.md`)
+
+## Phase 8: Indian City Geocoding & UI Aesthetic Refinement
+- [x] Implement pre-indexed Indian city and state alias resolver (`POPULAR_INDIAN_CITIES`) in `src/weather.py` (`Gurgaon` $\rightarrow$ **Haryana**, `Bangalore` $\rightarrow$ **Karnataka**, `Mumbai` $\rightarrow$ **Maharashtra**, `Kochi` $\rightarrow$ **Kerala**, `Shimla` $\rightarrow$ **Himachal Pradesh**, etc.)
+- [x] Implement population-weighted sorting for Open-Meteo geocoding queries to eliminate small village homonym misclassifications
+- [x] Standardize UI yellow accent color palette to warm solar gold (`amber-400` / `hover:amber-300`)
+- [x] Ensure rock-solid zero-shake dashboard container layout with dedicated inner scroll viewport
+- [x] Verify production bundle build (`npm run build`) with zero errors

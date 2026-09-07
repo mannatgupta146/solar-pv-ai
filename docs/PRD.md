@@ -88,3 +88,16 @@ To maintain both scientific rigor for peer-review and daily practical utility:
 | **Tariff Sensitivity Matrix (₹ Loss)** | $\text{₹}4/\text{kWh} \rightarrow \text{₹}4,164.04$<br>$\text{₹}6/\text{kWh} \rightarrow \text{₹}6,246.06$<br>$\text{₹}8/\text{kWh} \rightarrow \text{₹}8,328.08$<br>$\text{₹}10/\text{kWh} \rightarrow \text{₹}10,410.10$<br>$\text{₹}12/\text{kWh} \rightarrow \text{₹}12,492.12$ |
 | **Final Predictions Report** | `results/predictions/predictions.csv` |
 | **Model Performance Metrics** | `results/metrics/model_metrics.csv` |
+
+---
+
+## 6. Any-Location Geocoding Engine & Dashboard UI Specifications
+
+### 6.1 Indian City Geocoding Engine (`src/weather.py`)
+- **Curated City Map (`POPULAR_INDIAN_CITIES`)**: Maintains verified coordinate and state mapping for all major Indian cities and regional aliases (`Gurgaon` / `Gurugram` $\rightarrow$ **Haryana**, `Bangalore` / `Bengaluru` $\rightarrow$ **Karnataka**, `Mumbai` / `Bombay` $\rightarrow$ **Maharashtra**, `Kochi` / `Cochin` $\rightarrow$ **Kerala**, `Shimla` $\rightarrow$ **Himachal Pradesh**, `Pune` $\rightarrow$ **Maharashtra**, `Jaipur` $\rightarrow$ **Rajasthan**, `Patna` $\rightarrow$ **Bihar**, `Delhi` $\rightarrow$ **Delhi**, `Hyderabad` $\rightarrow$ **Telangana**, `Chennai` $\rightarrow$ **Tamil Nadu**, `Kolkata` $\rightarrow$ **West Bengal**, `Ahmedabad` $\rightarrow$ **Gujarat**).
+- **Open-Meteo Fallback**: Uses population-weighted sorting for unlisted geocoding queries to ensure major population centers are selected over small rural villages with identical names.
+
+### 6.2 Visual Design System (`frontend/src/App.tsx`)
+- **Color Palette**: Solar Golden Amber (`amber-400` / `hover:amber-300`) with high-contrast text (`text-zinc-950`).
+- **Layout Integrity**: Rock-solid zero-shake container (`h-screen overflow-hidden` root layout with dedicated internal scrolling canvas).
+- **Typography & Components**: Proportional KPI numbers (`text-2xl font-bold`), single-line card titles, and clean white sidebar (`bg-white border-r border-zinc-200`).

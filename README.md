@@ -6,10 +6,12 @@ An AI-powered solar plant decision support system and web dashboard built on rea
 
 ## 🌟 Key Decision Support Features
 
+- **🗺️ Any-Location Indian City Geocoding Engine**: Search any Indian city or town (`Gurgaon`, `Pune`, `Jaipur`, `Shimla`, `Kochi`, `Patna`, `Bangalore`, etc.) powered by Open-Meteo live solar radiation data and pre-indexed city alias resolution (`POPULAR_INDIAN_CITIES`) that accurately maps legacy queries (`Gurgaon` $\rightarrow$ **Gurgaon, Haryana**).
 - **☀️ Today's Solar Brief (Landing Page)**: Morning operational briefing combining weather forecast, solar potential (82%), expected generation (1,284 kWh), peak power (312 kW), best generation window (10:30 AM – 2:00 PM), and AI action recommendations.
 - **🌦️ Weather-Aware Forecasting**: Tomorrow's hourly generation forecast and 7-day solar potential outlook.
 - **🚨 14-System Health Matrix**: Real-time operational monitoring across all 14 NISE PV technology blocks with early warning alerts.
 - **🧹 Operator-Friendly Cause Attribution**: Translates ML feature attributions into plain-English root causes (*Cloud Cover & Shading: 48%*, *Irradiance Level: 31%*, *Equipment Factor: 21%*).
+- **🎨 Modern Solar Gold Palette & Zero-Shake UI**: Refined UI theme using rich solar golden amber accents (`amber-400`), proportional KPI typography, and a rock-solid non-flickering layout.
 - **Interactive Model Selection**: Switch between **XGBoost Regressor (Tuned)** and **Random Forest Regressor (Baseline)** with live prediction curve morphing.
 - **Smart Anomaly Filtering**: 4-step power drop detection pipeline with a 40-minute persistence filter that suppresses short cloud shadow false alarms.
 
