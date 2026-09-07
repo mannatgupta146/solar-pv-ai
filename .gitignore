@@ -3,12 +3,10 @@ __pycache__/
 .ipynb_checkpoints/
 node_modules/
 
-data/raw/
-data/processed/
-
 models/*.pkl
 
 .DS_Store
 
 *.pyc
 venv/
+

@@ -49,6 +49,10 @@ solar-pv-ai/
 │   ├── explain.py              # TreeSHAP feature attributions
 │   └── economics.py            # Energy loss (kWh) & monetary impact (₹) calculation
 │
+├── data/                       # NISE Dataset Storage (Tracked in Git)
+│   ├── raw/                    # Original raw sensor readings (NISE Gurugram)
+│   └── processed/              # Pre-processed clean dataset (cleaned_data.csv)
+│
 ├── models/                     # Saved ML Model Weights (.pkl)
 │   ├── xgboost.pkl
 │   └── random_forest.pkl
@@ -59,10 +63,9 @@ solar-pv-ai/
 │
 ├── docs/                       # Platform Documentation
 │   ├── overview.md             # High-level platform summary (plain English)
+│   ├── questions.md            # Comprehensive research paper & project Q&A guide
 │   ├── PRD.md                  # Product Requirements Document & Scope
-│   ├── tech_stack.md           # Technologies, file breakdown & setup guide
-│   ├── tasks.md                # Task matrix & progress log
-│   └── memory.md               # Verified empirical metrics & project status
+│   └── tech_stack.md           # Technologies, file breakdown & setup guide
 │
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Main Project Guide
