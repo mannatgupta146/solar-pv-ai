@@ -37,3 +37,12 @@
 - [x] Integrate live **Model Selector** dropdown for toggling between XGBoost Regressor and Random Forest Regressor with real-time curve overlay
 - [x] Refine UI typography, font sizing, and plain-English terminology for optimal presentation to reviewers
 - [x] Verify production build (`npm run build`)
+
+## Phase 7: Solar Operations & Decision Support Layer
+- [x] Implement weather forecast synthesis module (`src/weather.py`)
+- [x] Implement hourly tomorrow forecasting and 7-day solar potential outlook engine (`src/forecasting.py`)
+- [x] Implement 14-system operational health matrix & early warning risk engine (`src/risk_engine.py`)
+- [x] Implement AI recommendations & operator cause attribution engine (`src/recommendations.py`)
+- [x] Expose new REST endpoints (`GET /api/today`, `/api/forecast`, `/api/system-health`, `/api/attribution`, `/api/revenue`) in `api/main.py`
+- [x] Upgrade React web frontend (`frontend/src/App.tsx`) with **Today Brief**, **Weather Forecast**, and **14-System Health Matrix** views
+- [x] Update project documentation (`PRD.md`, `README.md`, `tech_stack.md`, `memory.md`, `tasks.md`)

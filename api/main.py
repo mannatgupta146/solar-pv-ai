@@ -13,8 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
 
 from src.config import CLEANED_DATA_PATH, RESULTS_DIR, MODELS_DIR
+from src.weather import geocode_location, fetch_weather_by_coords
+from src.forecasting import generate_7day_outlook, get_generation_comparison
+from src.risk_engine import evaluate_system_health_matrix
+from src.recommendations import generate_daily_brief, get_cause_attribution, get_financial_summary
 
-app = FastAPI(title="NISE Solar PV AI Analytics API", version="1.0.0")
+app = FastAPI(title="Solar PV Operations & Decision Support API", version="3.0.0")
 
 # Enable CORS for React frontend
 app.add_middleware(
@@ -24,6 +28,85 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/api/search-location")
+def search_and_predict_location(query: str = "Gurgaon", capacity_kw: float = 100.0):
+    """
+    Geocodes any Indian location query and predicts solar generation potential using live Open-Meteo API.
+    """
+    geo = geocode_location(query)
+    if not geo:
+        # Fallback to Gurgaon if query not found
+        geo = {
+            "name": query.capitalize(),
+            "admin1": "Haryana",
+            "latitude": 28.4595,
+            "longitude": 77.0266
+        }
+        
+    weather = fetch_weather_by_coords(
+        lat=geo["latitude"],
+        lon=geo["longitude"],
+        location_name=geo["name"],
+        state_name=geo["admin1"],
+        system_size_kw=capacity_kw
+    )
+    
+    brief = generate_daily_brief()
+    brief["location"] = f"{geo['name']}, {geo['admin1']}, India ({capacity_kw} kW System)"
+    brief["expected_generation_kwh"] = weather["expected_generation_kwh"]
+    brief["expected_peak_kw"] = weather["expected_peak_kw"]
+    brief["solar_potential_pct"] = weather["solar_potential_pct"]
+    brief["weather_summary"] = weather["condition"]
+    
+    return {
+        "query": query,
+        "location": geo,
+        "weather": weather,
+        "brief": brief
+    }
+
+
+@app.get("/api/forecast")
+def get_forecast_outlook():
+    """
+    Returns Tomorrow's Forecast and 7-day solar potential outlook.
+    """
+    outlook = generate_7day_outlook()
+    return {
+        "tomorrow": {
+            "date": "Tomorrow",
+            "expected_energy_kwh": outlook[1]["energy_kwh"],
+            "expected_peak_kw": outlook[1]["peak_kw"],
+            "solar_potential_pct": outlook[1]["potential_pct"]
+        },
+        "outlook": outlook
+    }
+
+
+@app.get("/api/system-health")
+def get_system_health():
+    """
+    Returns 14-system operational health matrix and early warning flags.
+    """
+    return evaluate_system_health_matrix()
+
+
+@app.get("/api/attribution")
+def get_attribution():
+    """
+    Returns operator-friendly root cause breakdown ("Why is production low?").
+    """
+    return get_cause_attribution()
+
+
+@app.get("/api/revenue")
+def get_revenue_impact():
+    """
+    Returns today's and monthly financial loss metrics.
+    """
+    return get_financial_summary()
 
 
 @app.get("/api/overview")

@@ -39,12 +39,12 @@ solar-pv-ai/
 │   ├── raw/nise/Inverter Report.xlsx
 │   └── processed/cleaned_data.csv
 ├── docs/
-│   ├── PRD.md (Locked Scope & Tariff Matrix)
-│   ├── tasks.md (Completed through Phase 6)
+│   ├── PRD.md (Decision Support System Scope)
+│   ├── tasks.md (Completed through Phase 7)
 │   ├── memory.md (Updated)
 │   └── tech_stack.md (System Python + Node.js)
 ├── frontend/
-│   ├── src/App.tsx (React Web Dashboard UI)
+│   ├── src/App.tsx (Operations & Decision Support UI)
 │   ├── index.html
 │   ├── dist/ (Production build bundle)
 │   └── vite.config.ts
@@ -56,6 +56,10 @@ solar-pv-ai/
 │   ├── 05_shap_analysis.ipynb (Verified)
 │   └── 06_economic_analysis.ipynb (Verified)
 ├── src/
+│   ├── weather.py (Weather forecast module)
+│   ├── forecasting.py (Hourly & 7-day forecast engine)
+│   ├── risk_engine.py (14-system health matrix)
+│   ├── recommendations.py (AI decision recommendation engine)
 │   ├── config.py (Configured)
 │   ├── data_loader.py (Verified)
 │   ├── preprocessing.py (Verified)

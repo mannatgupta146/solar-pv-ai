@@ -2,7 +2,8 @@
 
 ## 1. Core Stack
 - **Language**: Python 3.14 / 3.12 (System Python Environment), TypeScript / JavaScript
-- **Backend API**: FastAPI, Uvicorn CORS Middleware
+- **Backend API**: FastAPI, Uvicorn CORS Middleware (`api/main.py`)
+- **Decision Engine**: `src/weather.py`, `src/forecasting.py`, `src/risk_engine.py`, `src/recommendations.py`
 - **Frontend Dashboard**: React 18, Vite 6, TailwindCSS 4, Recharts, Lucide Icons
 - **Data Wrangling**: `pandas`, `numpy`, `openpyxl`
 - **Machine Learning**: `scikit-learn` (Random Forest Regressor), `xgboost` (XGBRegressor)

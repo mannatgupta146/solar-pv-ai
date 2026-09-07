@@ -1,16 +1,17 @@
-# Solar Energy Performance Tracker & Issue Detector ☀️
+# Solar Operations & Decision Support System ☀️
 
-An AI-powered solar power monitoring, anomaly detection, and economic impact dashboard built on real operational telemetry from the **National Institute of Solar Energy (NISE), Gurgaon, India**.
+An AI-powered solar plant decision support system and web dashboard built on real operational telemetry from the **National Institute of Solar Energy (NISE), Gurgaon, India**.
 
 ---
 
-## 🌟 Overview & Key Features
+## 🌟 Key Decision Support Features
 
-- **Real Telemetry Dataset**: Operational power data recorded every 10 minutes across 14 photovoltaic technology blocks and string inverters at NISE Gurgaon (June 21–27, 2026).
-- **Interactive Model Selection**: Real-time switching between **XGBoost Regressor (Tuned)** and **Random Forest Regressor (Baseline)** with live prediction curve updates.
-- **Plain-English Terminology**: Easy-to-understand metrics designed for reviewers, plant managers, and researchers.
-- **Smart Issue Filtering**: 4-step power drop detection pipeline with a 40-minute persistence filter that suppresses short cloud shadow false alarms.
-- **AI Explanation & Benchmark**: Integrated feature importance ranking and benchmark comparison across 14 solar panel technology types.
+- **☀️ Today's Solar Brief (Landing Page)**: Morning operational briefing combining weather forecast, solar potential (82%), expected generation (1,284 kWh), peak power (312 kW), best generation window (10:30 AM – 2:00 PM), and AI action recommendations.
+- **🌦️ Weather-Aware Forecasting**: Tomorrow's hourly generation forecast and 7-day solar potential outlook.
+- **🚨 14-System Health Matrix**: Real-time operational monitoring across all 14 NISE PV technology blocks with early warning alerts.
+- **🧹 Operator-Friendly Cause Attribution**: Translates ML feature attributions into plain-English root causes (*Cloud Cover & Shading: 48%*, *Irradiance Level: 31%*, *Equipment Factor: 21%*).
+- **Interactive Model Selection**: Switch between **XGBoost Regressor (Tuned)** and **Random Forest Regressor (Baseline)** with live prediction curve morphing.
+- **Smart Anomaly Filtering**: 4-step power drop detection pipeline with a 40-minute persistence filter that suppresses short cloud shadow false alarms.
 
 ---
 
@@ -20,31 +21,22 @@ An AI-powered solar power monitoring, anomaly detection, and economic impact das
 solar-pv-ai/
 │
 ├── api/                        # FastAPI REST API Backend
-│   └── main.py                 # Serving overview, performance, anomalies, explainability & tech benchmark
+│   └── main.py                 # Decision support & telemetry endpoints
 │
 ├── frontend/                   # React + Vite + TailwindCSS Web Dashboard
 │   ├── src/
-│   │   ├── App.tsx             # Main Interactive Dashboard UI
+│   │   ├── App.tsx             # Interactive Operations & Decision Support Dashboard UI
 │   │   ├── main.tsx
 │   │   └── index.css           # Styling setup
 │   ├── dist/                   # Production build bundle
 │   ├── index.html
-│   ├── package.json
-│   └── vite.config.ts
+│   └── package.json
 │
-├── data/
-│   ├── raw/nise/               # Original Inverter Report.xlsx telemetry
-│   └── processed/              # Processed CSV datasets
-│
-├── notebooks/                  # Step-by-step Jupyter Notebooks (01 to 06)
-│   ├── 01_data_inspection.ipynb
-│   ├── 02_data_cleaning_eda.ipynb
-│   ├── 03_power_prediction.ipynb
-│   ├── 04_anomaly_detection.ipynb
-│   ├── 05_shap_analysis.ipynb
-│   └── 06_economic_analysis.ipynb
-│
-├── src/                        # Core Python Machine Learning Modules
+├── src/                        # Core Decision Engine & Python ML Modules
+│   ├── weather.py              # Weather forecast synthesis module
+│   ├── forecasting.py          # Hourly & 7-day forecast engine
+│   ├── risk_engine.py          # 14-system health matrix & early warning risk engine
+│   ├── recommendations.py      # AI decision recommendation & cause attribution
 │   ├── config.py               # Dataset configuration & path definitions
 │   ├── data_loader.py          # Raw telemetry header parsing
 │   ├── preprocessing.py       # Data cleaning & physical sanity bounds
@@ -54,7 +46,7 @@ solar-pv-ai/
 │   ├── anomaly.py              # Deviation thresholding & 40-min persistence filtering
 │   ├── explain.py              # TreeSHAP feature attributions
 │   └── economics.py            # Energy loss (kWh) & monetary impact (₹) calculation
-│
+```
 ├── models/                     # Saved ML Models (.pkl)
 │   ├── xgboost.pkl
 │   └── random_forest.pkl

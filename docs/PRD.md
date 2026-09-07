@@ -1,23 +1,22 @@
-# Product Requirements Document (PRD): Solar PV AI Research Pipeline
+# Product Requirements Document (PRD): Solar PV Operations & Decision Support System
 
-## 1. Locked Research Title & Scope
-> **"An India-Specific Explainable Machine Learning Framework for Solar PV Performance Monitoring, Anomaly Detection, and Economic Impact Analysis"**
+## 1. Locked Research & System Scope
+> **"An AI-Based Decision Support & Performance Monitoring System for Indian Solar PV Operations Using NISE Telemetry and Weather-Aware Forecasting"**
 
 - **Primary Dataset**: National Institute of Solar Energy (NISE) Operational Telemetry (`Inverter Report.xlsx`)
-- **Geographic Focus**: India-Specific (NISE, Gurgaon)
-- **Target Audience**: Peer-Reviewed Renewable Energy / ML Journals
+- **Geographic Focus**: India-Specific (NISE, Gurgaon, Haryana)
+- **Primary Objective**: Transition from offline historical research analysis into an actionable daily decision support system for solar plant operators.
 
 ---
 
-## 2. Scientific Language & Methodological Rules
-To maintain rigorous scientific standards for peer review:
+## 2. Scientific Language & Operational Rules
+To maintain both scientific rigor for peer-review and daily practical utility:
 1. **No Unsubstantiated Fault Claims**:
-   - Use **"Performance Deviation Detection"** and **"Persistent Anomalous Periods"** instead of claiming "Fault Diagnosis" or "Inverter Faults" (since ground-truth maintenance logs are unlabelled).
-2. **Scenario-Based Tariff Sensitivity**:
-   - Do **not** claim $\text{₹}8/\text{kWh}$ is a fixed NISE plant tariff.
-   - Tariff is modeled as a **scenario parameter** evaluated across a sensitivity matrix ($\text{₹}4/\text{kWh}, \text{₹}6/\text{kWh}, \text{₹}8/\text{kWh}, \text{₹}10/\text{kWh}, \text{₹}12/\text{kWh}$).
-3. **Single-Dataset Focus**:
-   - Rely solely on NISE Indian PV operational dataset for internal consistency, avoiding domain mismatch or cross-dataset normalization issues from mixing non-Indian datasets (e.g. BR-PVGen).
+   - Use **"Performance Deviation Detection"** and **"Persistent Anomalous Periods"** instead of claiming unverified hardware faults.
+2. **Operator Actionability ("Today" Focus)**:
+   - Provide a morning **"Today's Solar Brief"** combining weather forecast, solar potential %, best generation window, energy at risk, and AI action recommendations.
+3. **Scenario-Based Tariff Sensitivity**:
+   - Evaluate financial loss across sensitivity scenarios ($\text{₹}4/\text{kWh}, \text{₹}6/\text{kWh}, \text{₹}8/\text{kWh}, \text{₹}10/\text{kWh}, \text{₹}12/\text{kWh}$).
 
 ---
 
@@ -44,41 +43,33 @@ To maintain rigorous scientific standards for peer review:
 ## 4. End-to-End System Architecture
 
 ```text
-                 NISE INDIA DATASET
-                         │
-                         ▼
-             Multiple PV Technologies (14)
-                         │
-                         ▼
-               Actual Power Telemetry
-                         │
-                         ▼
-        ┌────────────────┴────────────────┐
-        ▼                                 ▼
- Expected Power Model           Performance Analysis
-(Random Forest / XGBoost)      (Technology Comparison)
-        │
-        ▼
-   Actual - Expected
-        │
-        ▼
-Residual Anomaly Detection
-  (Deviation Threshold)
-        │
-        ▼
- Persistence Filtering
-    (40-min window)
-        │
-        ▼
-Persistent Anomalous Periods
-        │
-  ┌─────┴──────────────┐
-  ▼                    ▼
-Energy Loss        SHAP / XAI
-  │             (Explainability)
-  ▼
-₹ Financial Loss
- (Sensitivity Analysis)
+                  NISE Telemetry (14 Systems) & Weather Forecast
+                                        │
+                                        ▼
+                            Data Preprocessing Engine
+                                        │
+             ┌──────────────────────────┼──────────────────────────┐
+             ▼                          ▼                          ▼
+      Expected Power             Residual Anomaly           SHAP Feature
+       Forecast Model            Detection Filter           Attribution
+    (XGBoost / Random Forest)    (40-min Persistence)      (Explainability)
+             │                          │                          │
+             └──────────────────────────┼──────────────────────────┘
+                                        │
+                                        ▼
+                           Decision Support Engine
+                        (src/weather.py, forecasting.py,
+                        risk_engine.py, recommendations.py)
+                                        │
+             ┌──────────────────────────┼──────────────────────────┐
+             ▼                          ▼                          ▼
+     Today's Solar Brief       14-System Health Matrix    Tomorrow Forecast
+    (Best Generation Window)     (Early Warnings)         (7-Day Outlook)
+             │                          │                          │
+             └──────────────────────────┼──────────────────────────┘
+                                        │
+                                        ▼
+                          Web Operations Dashboard
 ```
 
 ---
