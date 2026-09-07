@@ -21,7 +21,12 @@ import {
   Building,
   ArrowRight,
   Sparkles,
-  RefreshCw
+  RefreshCw,
+  Calendar,
+  TrendingUp,
+  Coins,
+  LayoutGrid,
+  Table as TableIcon
 } from 'lucide-react';
 import { 
   LineChart, 
@@ -33,7 +38,8 @@ import {
   Legend, 
   ResponsiveContainer, 
   BarChart, 
-  Bar 
+  Bar,
+  ComposedChart
 } from 'recharts';
 
 const API_BASE = 'http://localhost:8000/api';
@@ -50,6 +56,8 @@ export default function App() {
   const [customCapacity, setCustomCapacity] = useState<number>(100);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [predictorTab, setPredictorTab] = useState<'weekly' | 'today'>('weekly');
+  const [weeklySubView, setWeeklySubView] = useState<'grid' | 'table'>('grid');
   
   // NISE Research Data States
   const [forecastData, setForecastData] = useState<any>(null);
@@ -129,7 +137,7 @@ export default function App() {
         {/* Sidebar Navigation */}
         <div className="flex-1 px-4 py-6 space-y-7 overflow-y-auto">
           
-          {/* Section 1: Live Operations */}
+          {/* Section 1: Operations */}
           <div className="space-y-2">
             <div className="px-3 text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider">
               Live Operations
@@ -144,14 +152,14 @@ export default function App() {
               }`}
             >
               <Compass className={`w-5 h-5 ${activeSection === 'predictor' ? 'text-zinc-950' : 'text-zinc-500'}`} />
-              Any-Location Predictor
+              Solar Forecast
             </button>
           </div>
 
-          {/* Section 2: NISE Research Telemetry */}
+          {/* Section 2: Plant Analytics */}
           <div className="space-y-2">
             <div className="px-3 text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider">
-              NISE Gurgaon Telemetry
+              Plant Analytics (Gurgaon)
             </div>
             
             <button
@@ -163,7 +171,7 @@ export default function App() {
               }`}
             >
               <Gauge className={`w-5 h-5 ${activeSection === 'nise_hub' && niseTab === 'overview' ? 'text-zinc-950' : 'text-zinc-500'}`} />
-              Plant KPIs & Overview
+              Plant Overview
             </button>
 
             <button
@@ -175,7 +183,7 @@ export default function App() {
               }`}
             >
               <LineChartIcon className={`w-5 h-5 ${activeSection === 'nise_hub' && niseTab === 'performance' ? 'text-zinc-950' : 'text-zinc-500'}`} />
-              AI Regressor Models
+              AI Predictions & Models
             </button>
 
             <button
@@ -187,7 +195,7 @@ export default function App() {
               }`}
             >
               <AlertTriangle className={`w-5 h-5 ${activeSection === 'nise_hub' && niseTab === 'anomaly' ? 'text-zinc-950' : 'text-zinc-500'}`} />
-              Issue & Drop Monitor
+              Alerts & Issues
             </button>
 
             <button
@@ -199,7 +207,7 @@ export default function App() {
               }`}
             >
               <BrainCircuit className={`w-5 h-5 ${activeSection === 'nise_hub' && niseTab === 'explainability' ? 'text-zinc-950' : 'text-zinc-500'}`} />
-              SHAP XAI & Techs
+              AI Insights & Tech Specs
             </button>
           </div>
         </div>
@@ -350,7 +358,7 @@ export default function App() {
                         {searchResult.weather.location_name}, {searchResult.weather.state}, India
                       </div>
                       <h2 className="text-2xl font-bold text-zinc-900 mt-1 flex items-center gap-2">
-                        Solar Generation Forecast & Weather Outlook
+                        Solar Power & Weather Forecast
                       </h2>
                     </div>
 
@@ -363,82 +371,530 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* 4 KPI Metrics Cards with Proportional Numbers */}
+                  {/* 4 KPI Metrics Cards including 7-Day Revenue & Total Yield */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                     
                     <div className="bg-zinc-50 border border-zinc-200/90 rounded-xl p-5 space-y-2 shadow-2xs">
                       <div className="flex items-center justify-between text-zinc-600 text-xs font-bold uppercase tracking-wider">
-                        <span>Planned Capacity</span>
+                        <span>System Capacity</span>
                         <Building className="w-4.5 h-4.5 text-zinc-500" />
                       </div>
                       <div className="text-2xl font-bold text-zinc-900">
                         {searchResult.weather.system_size_kw} <span className="text-xs font-semibold text-zinc-500">kWp</span>
                       </div>
-                      <p className="text-xs text-zinc-500 font-medium">Specified PV System Size</p>
+                      <p className="text-xs text-zinc-500 font-medium">Total Plant Capacity</p>
                     </div>
 
                     <div className="bg-white border border-amber-200/80 rounded-xl p-5 space-y-2 shadow-2xs border-t-4 border-t-amber-400">
                       <div className="flex items-center justify-between text-zinc-700 text-xs font-bold uppercase tracking-wider">
-                        <span>Daily Generation</span>
+                        <span>Today's Output</span>
                         <Zap className="w-4.5 h-4.5 text-amber-600" />
                       </div>
                       <div className="text-2xl font-bold text-zinc-900">
                         {searchResult.weather.expected_generation_kwh} <span className="text-xs font-semibold text-zinc-500">kWh</span>
                       </div>
-                      <p className="text-xs text-zinc-500 font-medium">Estimated Daily Output</p>
+                      <p className="text-xs text-zinc-500 font-medium">Expected Daily Generation</p>
                     </div>
 
                     <div className="bg-zinc-50 border border-zinc-200/90 rounded-xl p-5 space-y-2 shadow-2xs">
                       <div className="flex items-center justify-between text-zinc-600 text-xs font-bold uppercase tracking-wider">
-                        <span>Peak Noon Power</span>
-                        <Activity className="w-4.5 h-4.5 text-amber-600" />
+                        <span>7-Day Output</span>
+                        <TrendingUp className="w-4.5 h-4.5 text-amber-600" />
                       </div>
                       <div className="text-2xl font-bold text-zinc-900">
-                        {searchResult.weather.expected_peak_kw} <span className="text-xs font-semibold text-zinc-500">kW</span>
+                        {searchResult.weather.weekly_summary?.total_7day_kwh?.toLocaleString() || (searchResult.weather.expected_generation_kwh * 7).toFixed(1)} <span className="text-xs font-semibold text-zinc-500">kWh</span>
                       </div>
-                      <p className="text-xs text-zinc-500 font-medium">Max Hourly Power Output</p>
+                      <p className="text-xs text-zinc-500 font-medium">Total 7-Day Yield</p>
                     </div>
 
                     <div className="bg-zinc-50 border border-zinc-200/90 rounded-xl p-5 space-y-2 shadow-2xs">
                       <div className="flex items-center justify-between text-zinc-600 text-xs font-bold uppercase tracking-wider">
-                        <span>Solar Index</span>
-                        <Sparkles className="w-4.5 h-4.5 text-amber-600" />
+                        <span>7-Day Revenue</span>
+                        <IndianRupee className="w-4.5 h-4.5 text-zinc-600" />
                       </div>
                       <div className="text-2xl font-bold text-zinc-900">
-                        {searchResult.weather.solar_potential_pct}%
+                        ₹{searchResult.weather.weekly_summary?.total_7day_revenue_inr?.toLocaleString() || (searchResult.weather.expected_generation_kwh * 7 * 8).toFixed(0)}
                       </div>
-                      <p className="text-xs text-zinc-500 font-medium">Clear-Sky Efficiency Rating</p>
+                      <p className="text-xs text-zinc-500 font-medium">Rate: ₹8.0 / kWh</p>
                     </div>
 
                   </div>
-                </div>
 
-                {/* Hourly Power Forecast Chart */}
-                <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 space-y-4 shadow-xs">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div>
-                      <h3 className="text-lg font-bold text-zinc-900">Hourly Power Output Curve ({searchResult.weather.location_name})</h3>
-                      <p className="text-xs text-zinc-500 mt-1 font-medium">Shortwave solar radiation (W/m²) mapped to plant capacity.</p>
+                  {/* View Selector Toggle Bar */}
+                  <div className="pt-2 border-t border-zinc-100 flex items-center justify-between flex-wrap gap-4">
+                    <div className="flex items-center gap-2 bg-zinc-100 p-1.5 rounded-xl border border-zinc-200">
+                      <button
+                        onClick={() => setPredictorTab('weekly')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                          predictorTab === 'weekly' 
+                            ? 'bg-white text-zinc-900 shadow-xs border border-zinc-200' 
+                            : 'text-zinc-600 hover:text-zinc-900'
+                        }`}
+                      >
+                        <Calendar className="w-4 h-4 text-amber-600" />
+                        <span>7-Day Forecast</span>
+                      </button>
+                      <button
+                        onClick={() => setPredictorTab('today')}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                          predictorTab === 'today' 
+                            ? 'bg-white text-zinc-900 shadow-xs border border-zinc-200' 
+                            : 'text-zinc-600 hover:text-zinc-900'
+                        }`}
+                      >
+                        <Clock className="w-4 h-4 text-amber-600" />
+                        <span>Today's Hourly View</span>
+                      </button>
                     </div>
-                    <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-200">
-                      Daylight Window (06:00 – 18:00)
-                    </span>
-                  </div>
 
-                  <div className="h-88 w-full pt-3">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={searchResult.weather.hourly || []} margin={{ top: 10, right: 15, left: -10, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
-                        <XAxis dataKey="time" stroke="#71717a" tick={{ fontSize: 12 }} />
-                        <YAxis stroke="#71717a" tick={{ fontSize: 12 }} />
-                        <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e4e4e7', color: '#09090b', borderRadius: '10px', fontSize: '13px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)' }} />
-                        <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '14px' }} />
-                        <Bar dataKey="expected_power_kw" name="Expected Power Output (kW)" fill="#d97706" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="raw_irradiance_w_m2" name="Solar Irradiance (W/m²)" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                    <div className="text-xs font-mono text-zinc-600 font-semibold bg-zinc-50 px-3.5 py-2 rounded-xl border border-zinc-200 flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Best Yield Day: <strong className="text-zinc-900">{searchResult.weather.weekly_summary?.best_day_label || 'Tomorrow'} ({searchResult.weather.weekly_summary?.best_day_kwh || searchResult.weather.expected_generation_kwh} kWh)</strong></span>
+                    </div>
                   </div>
                 </div>
+
+                {/* VIEW 1: 7-DAY WEEKLY FORECAST & OUTLOOK */}
+                {predictorTab === 'weekly' && (
+                  <div className="space-y-7">
+                    
+                    {/* Weekly Generation & Peak Power Bar Chart */}
+                    <div className="bg-white border border-zinc-200/90 rounded-2xl p-6 sm:p-7 space-y-4 shadow-xs">
+                      <div className="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-bold text-zinc-900">7-Day Solar Yield & Power Outlook</h3>
+                            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-bold font-mono">
+                              {searchResult.weather.location_name}
+                            </span>
+                          </div>
+                          <p className="text-xs text-zinc-500 mt-1 font-medium">Daily expected energy production (kWh), peak noon capacity (kW), and cloud attenuation forecast.</p>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 bg-zinc-100/80 p-1 rounded-xl border border-zinc-200">
+                          <button
+                            onClick={() => setWeeklySubView('grid')}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              weeklySubView === 'grid'
+                                ? 'bg-white text-zinc-900 shadow-xs border border-zinc-200/80'
+                                : 'text-zinc-500 hover:text-zinc-800'
+                            }`}
+                          >
+                            <LayoutGrid className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Cards View</span>
+                          </button>
+                          <button
+                            onClick={() => setWeeklySubView('table')}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              weeklySubView === 'table'
+                                ? 'bg-white text-zinc-900 shadow-xs border border-zinc-200/80'
+                                : 'text-zinc-500 hover:text-zinc-800'
+                            }`}
+                          >
+                            <TableIcon className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Table Matrix</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="h-80 w-full pt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={searchResult.weather.daily_forecast || []} margin={{ top: 10, right: 15, left: -10, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#f4f4f5" vertical={false} />
+                            <XAxis dataKey="day_label" stroke="#71717a" tick={{ fontSize: 12, fontWeight: 600 }} />
+                            <YAxis stroke="#71717a" tick={{ fontSize: 12 }} />
+                            <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e4e4e7', color: '#09090b', borderRadius: '12px', fontSize: '13px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.08)' }} />
+                            <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
+                            <Bar dataKey="expected_generation_kwh" name="Daily Generation (kWh)" fill="#fbbf24" radius={[6, 6, 0, 0]} />
+                            <Bar dataKey="expected_peak_kw" name="Peak Noon Power (kW)" fill="#18181b" radius={[6, 6, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* 7-DAY FORECAST SUB-VIEW 1: MODERN RESPONSIVE CARD DECK */}
+                    {weeklySubView === 'grid' && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-bold text-zinc-800 uppercase tracking-wider flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-amber-600" />
+                            <span>Daily Solar Forecast Deck (7 Days)</span>
+                          </h4>
+                          <span className="text-xs text-zinc-500 font-medium">Click card for details</span>
+                        </div>
+
+                        <div className="flex gap-3.5 overflow-x-auto pb-3 pt-1 scrollbar-thin scroll-smooth">
+                          {searchResult.weather.daily_forecast?.map((day: any, idx: number) => {
+                            const isToday = idx === 0;
+                            const maxGen = Math.max(...(searchResult.weather.daily_forecast?.map((d: any) => d.expected_generation_kwh) || [500]));
+                            const yieldPct = Math.min(100, Math.round((day.expected_generation_kwh / maxGen) * 100));
+                            const isHighYield = day.solar_potential_pct >= 90;
+                            const isModYield = day.solar_potential_pct >= 75;
+
+                            return (
+                              <div
+                                key={idx}
+                                className={`relative rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between space-y-3.5 min-w-48 flex-1 shrink-0 ${
+                                  isToday
+                                    ? 'bg-linear-to-b from-amber-500/10 via-amber-50/50 to-white border-2 border-amber-400 shadow-md ring-4 ring-amber-400/10'
+                                    : yieldPct === 100
+                                      ? 'bg-linear-to-b from-amber-100/40 to-white border border-amber-300 shadow-xs hover:shadow-md'
+                                      : 'bg-white border border-zinc-200/90 hover:border-amber-300 hover:shadow-md'
+                                }`}
+                              >
+                                {/* Top Header Badge */}
+                                <div className="space-y-1.5">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span className="font-bold text-zinc-900 text-sm font-sans tracking-tight whitespace-nowrap">
+                                      {day.day_label}
+                                    </span>
+                                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-zinc-100 text-zinc-500 shrink-0 whitespace-nowrap">
+                                      {day.date ? day.date.split('-').slice(1).join('/') : ''}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center gap-1.5 text-xs text-zinc-600 pt-0.5">
+                                    <div className="w-6 h-6 rounded-lg bg-amber-100/70 flex items-center justify-center shrink-0">
+                                      {day.condition.includes('Clear') ? (
+                                        <Sun className="w-3.5 h-3.5 text-amber-600" />
+                                      ) : (
+                                        <CloudSun className="w-3.5 h-3.5 text-amber-700" />
+                                      )}
+                                    </div>
+                                    <span className="font-semibold text-[11px] text-zinc-700 leading-tight whitespace-nowrap truncate">
+                                      {day.condition}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Main Metric Box: kWh Generation */}
+                                <div className="bg-zinc-50/90 rounded-xl p-3 border border-zinc-100/80 space-y-1">
+                                  <div className="flex items-center justify-between text-[10px] uppercase font-bold tracking-wider text-zinc-400">
+                                    <span className="whitespace-nowrap">Generation</span>
+                                    <Zap className="w-3 h-3 text-amber-500 shrink-0" />
+                                  </div>
+                                  <div className="text-xl font-bold font-mono text-zinc-900 leading-tight whitespace-nowrap">
+                                    {day.expected_generation_kwh}
+                                    <span className="text-xs font-semibold text-zinc-500 font-sans ml-1">kWh</span>
+                                  </div>
+                                  
+                                  {/* Progress bar */}
+                                  <div className="w-full bg-zinc-200/90 rounded-full h-1.5 mt-2 overflow-hidden">
+                                    <div
+                                      className={`h-1.5 rounded-full transition-all duration-500 ${
+                                        isHighYield ? 'bg-amber-500' : isModYield ? 'bg-amber-400' : 'bg-zinc-400'
+                                      }`}
+                                      style={{ width: `${yieldPct}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+
+                                {/* Sub-metrics: Peak kW & Revenue */}
+                                <div className="space-y-1.5 text-xs font-mono border-t border-zinc-100 pt-2">
+                                  <div className="flex items-center justify-between text-zinc-600 gap-1">
+                                    <span className="text-[10px] text-zinc-400 font-sans uppercase font-medium whitespace-nowrap">Peak kW</span>
+                                    <span className="font-bold text-zinc-800 whitespace-nowrap">{day.expected_peak_kw} kW</span>
+                                  </div>
+                                  <div className="flex items-center justify-between text-zinc-600 gap-1">
+                                    <span className="text-[10px] text-zinc-400 font-sans uppercase font-medium whitespace-nowrap">Est. Revenue</span>
+                                    <span className="font-bold text-amber-950 whitespace-nowrap">₹{day.estimated_revenue_inr?.toLocaleString()}</span>
+                                  </div>
+                                </div>
+
+                                {/* Solar Potential Efficiency Badge */}
+                                <div className="pt-0.5">
+                                  <span className={`w-full py-1.5 px-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 border shadow-2xs whitespace-nowrap ${
+                                    isHighYield
+                                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80'
+                                      : isModYield
+                                        ? 'bg-amber-50 text-amber-900 border-amber-200/80'
+                                        : 'bg-zinc-100 text-zinc-700 border-zinc-200/80'
+                                  }`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isHighYield ? 'bg-emerald-500 animate-pulse' : isModYield ? 'bg-amber-500' : 'bg-zinc-400'}`}></span>
+                                    {day.solar_potential_pct}% Potential
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 7-DAY FORECAST SUB-VIEW 2: HIGH-DENSITY TABLE MATRIX */}
+                    {weeklySubView === 'table' && (
+                      <div className="bg-white border border-zinc-200/90 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <div>
+                            <h3 className="text-lg font-bold text-zinc-900">7-Day Detailed Forecast & Revenue Matrix</h3>
+                            <p className="text-xs text-zinc-500 mt-1 font-medium">Tabular view of generation, relative yield percentages, peak power, and tariff revenue.</p>
+                          </div>
+                          <span className="text-xs font-mono font-bold px-3 py-1 rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-200">
+                            Tariff: ₹8.0 / kWh
+                          </span>
+                        </div>
+
+                        <div className="overflow-x-auto scrollbar-thin">
+                          <table className="w-full text-left text-sm border-collapse min-w-180">
+                            <thead>
+                              <tr className="border-b border-zinc-200 text-zinc-500 font-bold text-xs uppercase tracking-wider bg-zinc-50/70">
+                                <th className="py-3.5 px-4 whitespace-nowrap">Day & Date</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Condition</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Generation (kWh)</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Relative Yield</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Peak Noon Power</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Est. Revenue (₹)</th>
+                                <th className="py-3.5 px-4 whitespace-nowrap">Solar Potential</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-100">
+                              {searchResult.weather.daily_forecast?.map((day: any, idx: number) => {
+                                const isToday = idx === 0;
+                                const maxGen = Math.max(...(searchResult.weather.daily_forecast?.map((d: any) => d.expected_generation_kwh) || [500]));
+                                const yieldPct = Math.min(100, Math.round((day.expected_generation_kwh / maxGen) * 100));
+                                const isHighYield = day.solar_potential_pct >= 90;
+                                const isModYield = day.solar_potential_pct >= 75;
+
+                                return (
+                                  <tr key={idx} className={`transition ${isToday ? 'bg-amber-50/60 font-semibold' : 'hover:bg-zinc-50/80'}`}>
+                                    <td className="py-4 px-4 font-bold text-zinc-900 text-sm font-sans whitespace-nowrap">
+                                      <div className="flex items-center gap-2">
+                                        {isToday && <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0"></span>}
+                                        <span>{day.day_label}</span>
+                                        <span className="text-xs font-mono text-zinc-400 font-semibold">{day.date ? day.date.split('-').slice(1).join('/') : ''}</span>
+                                      </div>
+                                    </td>
+                                    <td className="py-4 px-4 text-zinc-700 text-sm whitespace-nowrap">
+                                      <span className="flex items-center gap-2">
+                                        {day.condition.includes('Clear') ? (
+                                          <Sun className="w-4 h-4 text-amber-500 shrink-0" />
+                                        ) : (
+                                          <CloudSun className="w-4 h-4 text-amber-600 shrink-0" />
+                                        )}
+                                        <span className="whitespace-nowrap">{day.condition}</span>
+                                      </span>
+                                    </td>
+                                    <td className="py-4 px-4 font-mono font-bold text-zinc-900 text-base whitespace-nowrap">
+                                      {day.expected_generation_kwh} <span className="text-xs font-normal text-zinc-500 font-sans ml-0.5">kWh</span>
+                                    </td>
+                                    <td className="py-4 px-4 min-w-36 whitespace-nowrap">
+                                      <div className="w-full bg-zinc-100 rounded-full h-2 overflow-hidden">
+                                        <div className="bg-amber-400 h-2 rounded-full" style={{ width: `${yieldPct}%` }}></div>
+                                      </div>
+                                      <span className="text-[10px] text-zinc-400 font-mono font-semibold whitespace-nowrap">{yieldPct}% of peak</span>
+                                    </td>
+                                    <td className="py-4 px-4 font-mono text-zinc-800 text-sm font-bold whitespace-nowrap">{day.expected_peak_kw} kW</td>
+                                    <td className="py-4 px-4 font-mono font-bold text-zinc-900 text-sm whitespace-nowrap">₹{day.estimated_revenue_inr?.toLocaleString()}</td>
+                                    <td className="py-4 px-4 whitespace-nowrap">
+                                      <span className={`text-xs font-bold px-3 py-1 rounded-lg border inline-flex items-center gap-1.5 whitespace-nowrap ${
+                                        isHighYield
+                                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200/90'
+                                          : isModYield
+                                            ? 'bg-amber-50 text-amber-900 border-amber-200/90'
+                                            : 'bg-zinc-100 text-zinc-700 border-zinc-200'
+                                      }`}>
+                                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isHighYield ? 'bg-emerald-500 animate-pulse' : isModYield ? 'bg-amber-500' : 'bg-zinc-400'}`}></span>
+                                        {day.solar_potential_pct}% Efficiency
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 7-DAY SUMMARY CUMULATIVE FOOTER BAR */}
+                    <div className="bg-linear-to-r from-amber-500/10 via-amber-400/5 to-amber-500/10 border border-amber-300/80 rounded-2xl p-5 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-900 flex items-center justify-center shrink-0">
+                          <Sparkles className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold uppercase tracking-wider text-amber-900 whitespace-nowrap">7-Day Cumulative Summary</div>
+                          <div className="text-sm text-zinc-600 font-medium">Estimated 7-day generation & financial yields across {searchResult.weather.location_name}</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-6 flex-wrap">
+                        <div className="space-y-0.5">
+                          <div className="text-[11px] font-semibold text-zinc-500 uppercase font-sans whitespace-nowrap">Total 7-Day Energy</div>
+                          <div className="text-lg font-bold font-mono text-zinc-900 whitespace-nowrap">
+                            {searchResult.weather.weekly_summary?.total_7day_kwh?.toLocaleString() || (searchResult.weather.expected_generation_kwh * 7).toFixed(1)} kWh
+                          </div>
+                        </div>
+
+                        <div className="h-8 w-px bg-amber-200 hidden sm:block"></div>
+
+                        <div className="space-y-0.5">
+                          <div className="text-[11px] font-semibold text-zinc-500 uppercase font-sans whitespace-nowrap">Avg Daily Yield</div>
+                          <div className="text-lg font-bold font-mono text-zinc-900 whitespace-nowrap">
+                            {searchResult.weather.weekly_summary?.avg_daily_kwh || searchResult.weather.expected_generation_kwh} kWh/d
+                          </div>
+                        </div>
+
+                        <div className="h-8 w-px bg-amber-200 hidden sm:block"></div>
+
+                        <div className="space-y-0.5">
+                          <div className="text-[11px] font-bold text-amber-900 uppercase font-sans whitespace-nowrap">Est. Total Revenue</div>
+                          <div className="text-xl font-bold font-mono text-amber-950 whitespace-nowrap">
+                            ₹{searchResult.weather.weekly_summary?.total_7day_revenue_inr?.toLocaleString() || (searchResult.weather.expected_generation_kwh * 7 * 8).toFixed(0)}
+                          </div>
+                        </div>
+
+                        <div className="pl-2">
+                          <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-500 text-white shadow-xs inline-block whitespace-nowrap">
+                            Best Day: {searchResult.weather.weekly_summary?.best_day_label || 'Tomorrow'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+
+                {/* VIEW 2: TODAY INTRADAY HOURLY CURVE & TELEMETRY */}
+                {predictorTab === 'today' && (
+                  <div className="space-y-7">
+                    
+                    {/* 4 Intraday Quick Metric Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                      <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 space-y-2 shadow-2xs">
+                        <div className="flex items-center justify-between text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                          <span className="whitespace-nowrap">Peak Irradiance</span>
+                          <Sun className="w-4.5 h-4.5 text-amber-500 shrink-0" />
+                        </div>
+                        <div className="text-2xl font-bold text-zinc-900 font-mono">
+                          {Math.max(...(searchResult.weather.hourly?.map((h: any) => h.raw_irradiance_w_m2) || [700]))} <span className="text-xs font-semibold text-zinc-400 font-sans">W/m²</span>
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium whitespace-nowrap truncate">Max Noon Solar Irradiance</p>
+                      </div>
+
+                      <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 space-y-2 shadow-2xs">
+                        <div className="flex items-center justify-between text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                          <span className="whitespace-nowrap">Peak Window</span>
+                          <Clock className="w-4.5 h-4.5 text-amber-600 shrink-0" />
+                        </div>
+                        <div className="text-lg font-bold text-zinc-900 whitespace-nowrap">
+                          {searchResult.weather.best_window || '10:30 AM – 2:30 PM'}
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium whitespace-nowrap truncate">Optimal Solar Window</p>
+                      </div>
+
+                      <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 space-y-2 shadow-2xs">
+                        <div className="flex items-center justify-between text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                          <span className="whitespace-nowrap">Avg Daytime Temp</span>
+                          <CloudSun className="w-4.5 h-4.5 text-amber-600 shrink-0" />
+                        </div>
+                        <div className="text-2xl font-bold text-zinc-900 font-mono">
+                          {searchResult.weather.current_temp_c || 31}°C
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium whitespace-nowrap truncate">Ambient Daylight Temp</p>
+                      </div>
+
+                      <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 space-y-2 shadow-2xs">
+                        <div className="flex items-center justify-between text-zinc-500 text-xs font-bold uppercase tracking-wider">
+                          <span className="whitespace-nowrap">Cloud Cover</span>
+                          <Activity className="w-4.5 h-4.5 text-amber-600 shrink-0" />
+                        </div>
+                        <div className="text-2xl font-bold text-zinc-900 font-mono">
+                          {searchResult.weather.avg_cloud_cover_pct || 15}% <span className="text-xs font-semibold text-zinc-400 font-sans">Cloudiness</span>
+                        </div>
+                        <p className="text-xs text-zinc-500 font-medium whitespace-nowrap truncate">Daytime Cloud Cover</p>
+                      </div>
+                    </div>
+
+                    {/* Dual-Axis Intraday Power & Weather Chart */}
+                    <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 space-y-4 shadow-xs">
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <div>
+                          <h3 className="text-lg font-bold text-zinc-900">Today's Hourly Power & Weather ({searchResult.weather.location_name})</h3>
+                          <p className="text-xs text-zinc-500 mt-1 font-medium">Hourly solar sunlight (W/m²), power output (kW), and cloud cover (%) from 6 AM to 6 PM.</p>
+                        </div>
+                        <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-200">
+                          6 AM – 6 PM
+                        </span>
+                      </div>
+
+                      <div className="h-96 w-full pt-3">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <ComposedChart data={searchResult.weather.hourly || []} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+                            <XAxis dataKey="time" stroke="#71717a" tick={{ fontSize: 12 }} />
+                            <YAxis yAxisId="left" stroke="#71717a" tick={{ fontSize: 12 }} />
+                            <YAxis yAxisId="right" orientation="right" domain={[0, 100]} stroke="#ef4444" tick={{ fontSize: 12 }} unit="%" />
+                            <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e4e4e7', color: '#09090b', borderRadius: '10px', fontSize: '13px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)' }} />
+                            <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '14px' }} />
+                            <Bar yAxisId="left" dataKey="expected_power_kw" name="Expected Power Output (kW)" fill="#fbbf24" radius={[4, 4, 0, 0]} />
+                            <Bar yAxisId="left" dataKey="raw_irradiance_w_m2" name="Solar Irradiance (W/m²)" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
+                            <Line yAxisId="right" type="monotone" dataKey="cloud_cover_pct" name="Cloud Cover (%)" stroke="#ef4444" strokeWidth={2.2} dot={false} />
+                          </ComposedChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Hourly Operations & Telemetry Matrix Table */}
+                    <div className="bg-white border border-zinc-200/90 rounded-2xl p-7 space-y-4 shadow-xs">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-lg font-bold text-zinc-900">Today's Hourly Power Breakdown</h3>
+                          <p className="text-xs text-zinc-500 mt-1 font-medium">Hourly breakdown of sunlight, expected power generation, temperature, and cloud cover.</p>
+                        </div>
+                        <span className="text-xs font-mono font-bold px-3 py-1 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200">
+                          100 kW System
+                        </span>
+                      </div>
+
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm border-collapse">
+                          <thead>
+                            <tr className="border-b border-zinc-200 text-zinc-600 font-bold text-xs uppercase tracking-wider">
+                              <th className="py-3.5 px-4">Time Window</th>
+                              <th className="py-3.5 px-4">Irradiance (W/m²)</th>
+                              <th className="py-3.5 px-4">Cloud Cover (%)</th>
+                              <th className="py-3.5 px-4">Temp (°C)</th>
+                              <th className="py-3.5 px-4">Expected Power (kW)</th>
+                              <th className="py-3.5 px-4">Operational Phase</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-zinc-100 font-mono text-xs">
+                            {searchResult.weather.hourly?.map((h: any, idx: number) => {
+                              const isPeak = h.hour >= 11 && h.hour <= 14;
+                              const isRamp = (h.hour >= 8 && h.hour <= 10) || (h.hour >= 15 && h.hour <= 16);
+                              return (
+                                <tr key={idx} className={`transition ${isPeak ? 'bg-amber-50/50 font-semibold' : 'hover:bg-zinc-50/80'}`}>
+                                  <td className="py-3.5 px-4 font-bold text-zinc-900 text-sm font-sans flex items-center gap-2">
+                                    <Clock className={`w-4 h-4 ${isPeak ? 'text-amber-600' : 'text-zinc-400'}`} />
+                                    {h.time}
+                                  </td>
+                                  <td className="py-3.5 px-4 text-zinc-700 font-bold">{h.raw_irradiance_w_m2} W/m²</td>
+                                  <td className="py-3.5 px-4 text-zinc-600">{h.cloud_cover_pct}%</td>
+                                  <td className="py-3.5 px-4 text-zinc-600">{h.temperature_c}°C</td>
+                                  <td className="py-3.5 px-4 text-zinc-900 font-bold text-sm">{h.expected_power_kw} kW</td>
+                                  <td className="py-3.5 px-4 font-sans">
+                                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border inline-flex items-center gap-1.5 ${
+                                      isPeak 
+                                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+                                        : isRamp 
+                                          ? 'bg-amber-50 text-amber-900 border-amber-200' 
+                                          : 'bg-zinc-100 text-zinc-600 border-zinc-200'
+                                    }`}>
+                                      <span className={`w-1.5 h-1.5 rounded-full ${isPeak ? 'bg-emerald-500' : isRamp ? 'bg-amber-500' : 'bg-zinc-400'}`}></span>
+                                      {isPeak ? 'Peak Solar Window' : isRamp ? 'Optimal Ramping' : 'Low Sun Elevation'}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                )}
 
               </div>
             )}
@@ -671,8 +1127,8 @@ export default function App() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {anomalies?.events?.slice(0, 6).map((ev: any) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {anomalies?.events?.map((ev: any) => (
                       <div key={ev.id} className="bg-zinc-50 border border-zinc-200/90 rounded-xl p-5 space-y-3.5 shadow-2xs">
                         <div className="flex items-center justify-between text-xs">
                           <span className="font-mono text-zinc-700 font-bold">{ev.timestamp}</span>

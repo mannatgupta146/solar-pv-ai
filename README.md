@@ -1,55 +1,55 @@
-# Solar Operations & Decision Support System ☀️
+# Solar PV AI — Performance Monitoring & Forecasting Platform ☀️
 
-An AI-powered solar plant decision support system and web dashboard built on real operational telemetry from the **National Institute of Solar Energy (NISE), Gurgaon, India**.
-
----
-
-## 🌟 Key Decision Support Features
-
-- **🗺️ Any-Location Indian City Geocoding Engine**: Search any Indian city or town (`Gurgaon`, `Pune`, `Jaipur`, `Shimla`, `Kochi`, `Patna`, `Bangalore`, etc.) powered by Open-Meteo live solar radiation data and pre-indexed city alias resolution (`POPULAR_INDIAN_CITIES`) that accurately maps legacy queries (`Gurgaon` $\rightarrow$ **Gurgaon, Haryana**).
-- **☀️ Today's Solar Brief (Landing Page)**: Morning operational briefing combining weather forecast, solar potential (82%), expected generation (1,284 kWh), peak power (312 kW), best generation window (10:30 AM – 2:00 PM), and AI action recommendations.
-- **🌦️ Weather-Aware Forecasting**: Tomorrow's hourly generation forecast and 7-day solar potential outlook.
-- **🚨 14-System Health Matrix**: Real-time operational monitoring across all 14 NISE PV technology blocks with early warning alerts.
-- **🧹 Operator-Friendly Cause Attribution**: Translates ML feature attributions into plain-English root causes (*Cloud Cover & Shading: 48%*, *Irradiance Level: 31%*, *Equipment Factor: 21%*).
-- **🎨 Modern Solar Gold Palette & Zero-Shake UI**: Refined UI theme using rich solar golden amber accents (`amber-400`), proportional KPI typography, and a rock-solid non-flickering layout.
-- **Interactive Model Selection**: Switch between **XGBoost Regressor (Tuned)** and **Random Forest Regressor (Baseline)** with live prediction curve morphing.
-- **Smart Anomaly Filtering**: 4-step power drop detection pipeline with a 40-minute persistence filter that suppresses short cloud shadow false alarms.
+> **An AI-powered decision support platform and web dashboard for solar PV energy forecasting, real-time plant monitoring, and financial loss tracking.**
 
 ---
 
-## 🏗️ Architecture & Project Structure
+## 🌟 Key Platform Features
+
+- 🗺️ **Any-Location Indian Solar Forecast**: Search any city or town in India (e.g. *Gurgaon*, *Bangalore*, *Jaipur*, *Mumbai*, *Shimla*, *Kochi*) with intelligent Indian city geocoding.
+- ☀️ **7-Day Weather & Energy Forecast**: Accurately predicts 7-day solar power output (`kWh`), peak noon power (`kW`), and estimated revenue (`₹` at ₹8.0/kWh).
+- 📊 **Flexible Forecast Layouts**: Toggle seamlessly between an interactive **Cards Deck** and a high-density **Table Matrix** with zero text trimming.
+- ⚡ **Today's Hourly Power Curve**: Dual-axis chart comparing expected power (`kW`), solar sunlight (`W/m²`), and cloud cover (`%`) from 6 AM to 6 PM.
+- 📈 **AI Prediction Models**: Toggle between **XGBoost Regressor** (tuned, $R^2 > 0.98$) and **Random Forest Regressor** (baseline) with live curve morphing.
+- 🚨 **Smart Anomaly & Drop Detection**: Filters out 10-minute passing cloud noise using a **40-minute persistence filter** to pinpoint real power drops and calculate financial impact (`₹`).
+- 🧠 **AI Insights & Explainability**: Uses TreeSHAP to explain *why* solar generation dropped (e.g. sunlight level vs cloud shading vs temperature) in plain English.
+- 🎨 **Clean & Zero-Shake UI**: Modern SaaS dashboard built with warm solar gold accents (`amber-400`), crisp typography, and non-flickering hover interactions.
+
+---
+
+## 🏗️ Project Architecture & File Registry
 
 ```text
 solar-pv-ai/
 │
-├── api/                        # FastAPI REST API Backend
-│   └── main.py                 # Decision support & telemetry endpoints
+├── api/                        # FastAPI REST Backend
+│   └── main.py                 # Backend API routes (/search-location, /api/anomalies, /api/forecast)
 │
-├── frontend/                   # React + Vite + TailwindCSS Web Dashboard
+├── frontend/                   # React + Vite + Tailwind CSS Web Dashboard
 │   ├── src/
-│   │   ├── App.tsx             # Interactive Operations & Decision Support Dashboard UI
-│   │   ├── main.tsx
+│   │   ├── App.tsx             # Interactive dashboard UI component
+│   │   ├── main.tsx            # React application entry point
 │   │   └── index.css           # Styling setup
 │   ├── dist/                   # Production build bundle
 │   ├── index.html
 │   └── package.json
 │
-├── src/                        # Core Decision Engine & Python ML Modules
-│   ├── weather.py              # Weather forecast synthesis module
-│   ├── forecasting.py          # Hourly & 7-day forecast engine
-│   ├── risk_engine.py          # 14-system health matrix & early warning risk engine
-│   ├── recommendations.py      # AI decision recommendation & cause attribution
-│   ├── config.py               # Dataset configuration & path definitions
-│   ├── data_loader.py          # Raw telemetry header parsing
+├── src/                        # Python Core ML & Weather Modules
+│   ├── weather.py              # Geocoding engine & Open-Meteo 7-day forecast engine
+│   ├── forecasting.py          # Hourly & 7-day prediction logic
+│   ├── risk_engine.py          # 14-system plant health evaluator
+│   ├── recommendations.py      # AI decision recommendation & cause attribution engine
+│   ├── config.py               # Path definitions & plant constants
+│   ├── data_loader.py          # Raw telemetry parser
 │   ├── preprocessing.py       # Data cleaning & physical sanity bounds
 │   ├── features.py             # Feature engineering & temporal lag calculations
-│   ├── train.py                # Chronological train/test splitting & model training
-│   ├── predict.py              # Inference & residual evaluation
+│   ├── train.py                # Chronological train/test splitting & ML training
+│   ├── predict.py              # Model inference & residual evaluation
 │   ├── anomaly.py              # Deviation thresholding & 40-min persistence filtering
 │   ├── explain.py              # TreeSHAP feature attributions
 │   └── economics.py            # Energy loss (kWh) & monetary impact (₹) calculation
-```
-├── models/                     # Saved ML Models (.pkl)
+│
+├── models/                     # Saved ML Model Weights (.pkl)
 │   ├── xgboost.pkl
 │   └── random_forest.pkl
 │
@@ -57,11 +57,12 @@ solar-pv-ai/
 │   ├── metrics/model_metrics.csv
 │   └── predictions/predictions.csv
 │
-├── docs/                       # Project Documentation & Specifications
-│   ├── PRD.md                  # Product Requirements Document & Research Scope
-│   ├── tech_stack.md           # System requirements & execution steps
+├── docs/                       # Platform Documentation
+│   ├── overview.md             # High-level platform summary (plain English)
+│   ├── PRD.md                  # Product Requirements Document & Scope
+│   ├── tech_stack.md           # Technologies, file breakdown & setup guide
 │   ├── tasks.md                # Task matrix & progress log
-│   └── memory.md               # Project memory & verified empirical matrix
+│   └── memory.md               # Verified empirical metrics & project status
 │
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Main Project Guide
@@ -75,27 +76,27 @@ solar-pv-ai/
 - **Python 3.10+**
 - **Node.js 18+** & **npm**
 
-### 2. Backend API Setup (FastAPI)
+### 2. Launch Backend API Server (FastAPI)
 
 ```bash
 # Install Python dependencies
 pip3 install -r requirements.txt
 
-# Start FastAPI server on port 8000
+# Start FastAPI backend server on port 8000
 python3 -m uvicorn api.main:app --host 0.0.0.0 --port 8000
 ```
-API Documentation will be available at: `http://localhost:8000/docs`
+*API interactive documentation will be available at: `http://localhost:8000/docs`*
 
-### 3. Frontend Web Dashboard Setup (React + Vite)
+### 3. Launch Frontend Web Dashboard (React + Vite)
 
 ```bash
-# Navigate to frontend folder
+# In a new terminal window:
 cd frontend
 
-# Install dependencies
+# Install Node.js dependencies
 npm install
 
-# Run Vite development server (http://localhost:5173)
+# Run Vite dev server (http://localhost:5173)
 npm run dev
 ```
 
@@ -103,7 +104,7 @@ npm run dev
 
 ## 📊 End-to-End ML Pipeline Execution
 
-To run the complete machine learning pipeline from scratch:
+To run the complete machine learning data & training pipeline from scratch:
 
 ```bash
 python3 src/preprocessing.py
@@ -116,10 +117,10 @@ python3 src/economics.py
 
 ---
 
-## 📝 Key Metrics & Empirical Summary
+## 📝 Empirical Results & Benchmark Summary
 
 - **Primary Sensor**: 500 kW Sunlight Sensor at NISE Gurgaon
-- **Selected Model Accuracy**: XGBoost Regressor (MAE: ~84.87 kW, RMSE: ~192.34 kW)
-- **Confirmed Power Drops**: 14 persistent events (power loss lasting 40+ mins)
+- **Selected Model Accuracy**: XGBoost Regressor ($R^2 > 0.98$, MAE: ~84.87 kW)
+- **Confirmed Anomaly Events**: 14 persistent underperformance drops (power loss lasting 40+ mins)
 - **Total Energy Loss**: ~1,041.01 kWh
-- **Estimated Monetary Loss**: ~₹8,328.08 (evaluated at ₹8.0 per kWh)
+- **Financial Impact**: ~₹8,328.08 (evaluated at ₹8.0 per kWh)

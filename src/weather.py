@@ -149,8 +149,68 @@ def fetch_weather_by_coords(lat: float, lon: float, location_name: str, state_na
         potential_pct = max(50, min(99, int(100 - avg_cloud * 0.4)))
         expected_energy = round(sum([h["expected_power_kw"] for h in daytime_hours]) * (10/60.0) * 6, 1)
         expected_peak = round((max_rad / 1000.0) * system_size_kw * 0.78, 1)
-        
-        condition = "Clear & Sunny" if avg_cloud < 20 else "Partly Cloudy" if avg_cloud < 50 else "Overcast & Cloudy"
+        condition = "Clear & Sunny" if avg_cloud < 20 else ("Partly Cloudy" if avg_cloud < 50 else "Overcast & Cloudy")
+
+        # 7-DAY DAILY FORECAST AGGREGATION
+        days_dict = {}
+        for i in range(len(times)):
+            t_str = times[i]
+            date_part, time_part = t_str.split("T")
+            hour_val = int(time_part.split(":")[0])
+            
+            if date_part not in days_dict:
+                days_dict[date_part] = []
+            days_dict[date_part].append({
+                "hour": hour_val,
+                "temp": temps[i] if i < len(temps) else 30.0,
+                "cloud": clouds[i] if i < len(clouds) else 15,
+                "rad": rads[i] if i < len(rads) else 0.0
+            })
+            
+        from datetime import datetime
+        daily_forecast = []
+        for idx, (date_str, h_data) in enumerate(list(days_dict.items())[:7]):
+            dt = datetime.strptime(date_str, "%Y-%m-%d")
+            date_label = "Today" if idx == 0 else ("Tomorrow" if idx == 1 else dt.strftime("%a %d %b"))
+            
+            daytime = [h for h in h_data if 6 <= h["hour"] <= 18]
+            if not daytime:
+                continue
+                
+            day_avg_cloud = int(sum(h["cloud"] for h in daytime) / len(daytime))
+            day_max_rad = max(h["rad"] for h in daytime)
+            day_total_pwr = sum((h["rad"] / 1000.0) * system_size_kw * 0.78 for h in daytime)
+            
+            day_gen_kwh = round(day_total_pwr, 1)
+            day_peak_kw = round((day_max_rad / 1000.0) * system_size_kw * 0.78, 1)
+            day_potential_pct = max(50, min(99, int(100 - day_avg_cloud * 0.4)))
+            day_est_revenue_inr = round(day_gen_kwh * 8.0, 0)
+            day_cond = "Clear & Sunny" if day_avg_cloud < 20 else ("Partly Cloudy" if day_avg_cloud < 50 else "Overcast & Cloudy")
+            
+            daily_forecast.append({
+                "date": date_str,
+                "day_label": date_label,
+                "condition": day_cond,
+                "avg_cloud_pct": day_avg_cloud,
+                "max_irradiance_w_m2": round(day_max_rad, 1),
+                "expected_generation_kwh": day_gen_kwh,
+                "expected_peak_kw": day_peak_kw,
+                "solar_potential_pct": day_potential_pct,
+                "estimated_revenue_inr": day_est_revenue_inr
+            })
+
+        total_7day_kwh = round(sum(d["expected_generation_kwh"] for d in daily_forecast), 1)
+        avg_daily_kwh = round(total_7day_kwh / len(daily_forecast), 1) if daily_forecast else expected_energy
+        total_7day_revenue_inr = round(sum(d["estimated_revenue_inr"] for d in daily_forecast), 0)
+        best_day_entry = max(daily_forecast, key=lambda x: x["expected_generation_kwh"]) if daily_forecast else {"day_label": "Today", "expected_generation_kwh": expected_energy}
+
+        weekly_summary = {
+            "total_7day_kwh": total_7day_kwh,
+            "avg_daily_kwh": avg_daily_kwh,
+            "total_7day_revenue_inr": total_7day_revenue_inr,
+            "best_day_label": best_day_entry["day_label"],
+            "best_day_kwh": best_day_entry["expected_generation_kwh"]
+        }
         
         return {
             "location_name": location_name,
@@ -168,11 +228,22 @@ def fetch_weather_by_coords(lat: float, lon: float, location_name: str, state_na
             "expected_generation_kwh": expected_energy,
             "expected_peak_kw": expected_peak,
             "best_window": "10:30 AM – 2:30 PM",
-            "hourly": daytime_hours
+            "hourly": daytime_hours,
+            "daily_forecast": daily_forecast,
+            "weekly_summary": weekly_summary
         }
         
     except Exception as e:
         print(f"Fallback weather for {location_name}: {e}")
+        fallback_daily = [
+            {"date": "2026-09-08", "day_label": "Today", "condition": "Clear & Sunny", "avg_cloud_pct": 15, "max_irradiance_w_m2": 720.0, "expected_generation_kwh": round(system_size_kw * 4.2, 1), "expected_peak_kw": round(system_size_kw * 0.8, 1), "solar_potential_pct": 92, "estimated_revenue_inr": round(system_size_kw * 4.2 * 8.0, 0)},
+            {"date": "2026-09-09", "day_label": "Tomorrow", "condition": "Clear & Sunny", "avg_cloud_pct": 10, "max_irradiance_w_m2": 740.0, "expected_generation_kwh": round(system_size_kw * 4.4, 1), "expected_peak_kw": round(system_size_kw * 0.82, 1), "solar_potential_pct": 95, "estimated_revenue_inr": round(system_size_kw * 4.4 * 8.0, 0)},
+            {"date": "2026-09-10", "day_label": "Wed 10 Sep", "condition": "Partly Cloudy", "avg_cloud_pct": 30, "max_irradiance_w_m2": 650.0, "expected_generation_kwh": round(system_size_kw * 3.8, 1), "expected_peak_kw": round(system_size_kw * 0.75, 1), "solar_potential_pct": 82, "estimated_revenue_inr": round(system_size_kw * 3.8 * 8.0, 0)},
+            {"date": "2026-09-11", "day_label": "Thu 11 Sep", "condition": "Clear & Sunny", "avg_cloud_pct": 12, "max_irradiance_w_m2": 730.0, "expected_generation_kwh": round(system_size_kw * 4.3, 1), "expected_peak_kw": round(system_size_kw * 0.81, 1), "solar_potential_pct": 93, "estimated_revenue_inr": round(system_size_kw * 4.3 * 8.0, 0)},
+            {"date": "2026-09-12", "day_label": "Fri 12 Sep", "condition": "Partly Cloudy", "avg_cloud_pct": 25, "max_irradiance_w_m2": 680.0, "expected_generation_kwh": round(system_size_kw * 4.0, 1), "expected_peak_kw": round(system_size_kw * 0.77, 1), "solar_potential_pct": 85, "estimated_revenue_inr": round(system_size_kw * 4.0 * 8.0, 0)},
+            {"date": "2026-09-13", "day_label": "Sat 13 Sep", "condition": "Overcast & Cloudy", "avg_cloud_pct": 55, "max_irradiance_w_m2": 520.0, "expected_generation_kwh": round(system_size_kw * 3.2, 1), "expected_peak_kw": round(system_size_kw * 0.65, 1), "solar_potential_pct": 70, "estimated_revenue_inr": round(system_size_kw * 3.2 * 8.0, 0)},
+            {"date": "2026-09-14", "day_label": "Sun 14 Sep", "condition": "Partly Cloudy", "avg_cloud_pct": 20, "max_irradiance_w_m2": 700.0, "expected_generation_kwh": round(system_size_kw * 4.1, 1), "expected_peak_kw": round(system_size_kw * 0.78, 1), "solar_potential_pct": 88, "estimated_revenue_inr": round(system_size_kw * 4.1 * 8.0, 0)}
+        ]
         return {
             "location_name": location_name,
             "state": state_name,
@@ -189,5 +260,13 @@ def fetch_weather_by_coords(lat: float, lon: float, location_name: str, state_na
             "expected_generation_kwh": round(system_size_kw * 4.2, 1),
             "expected_peak_kw": round(system_size_kw * 0.8, 1),
             "best_window": "10:30 AM – 2:00 PM",
-            "hourly": []
+            "hourly": [],
+            "daily_forecast": fallback_daily,
+            "weekly_summary": {
+                "total_7day_kwh": round(system_size_kw * 28.0, 1),
+                "avg_daily_kwh": round(system_size_kw * 4.0, 1),
+                "total_7day_revenue_inr": round(system_size_kw * 28.0 * 8.0, 0),
+                "best_day_label": "Tomorrow",
+                "best_day_kwh": round(system_size_kw * 4.4, 1)
+            }
         }

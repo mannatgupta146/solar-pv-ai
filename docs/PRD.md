@@ -93,11 +93,15 @@ To maintain both scientific rigor for peer-review and daily practical utility:
 
 ## 6. Any-Location Geocoding Engine & Dashboard UI Specifications
 
-### 6.1 Indian City Geocoding Engine (`src/weather.py`)
+### 6.1 Indian City Geocoding & 7-Day Forecast Engine (`src/weather.py`)
 - **Curated City Map (`POPULAR_INDIAN_CITIES`)**: Maintains verified coordinate and state mapping for all major Indian cities and regional aliases (`Gurgaon` / `Gurugram` $\rightarrow$ **Haryana**, `Bangalore` / `Bengaluru` $\rightarrow$ **Karnataka**, `Mumbai` / `Bombay` $\rightarrow$ **Maharashtra**, `Kochi` / `Cochin` $\rightarrow$ **Kerala**, `Shimla` $\rightarrow$ **Himachal Pradesh**, `Pune` $\rightarrow$ **Maharashtra**, `Jaipur` $\rightarrow$ **Rajasthan**, `Patna` $\rightarrow$ **Bihar**, `Delhi` $\rightarrow$ **Delhi**, `Hyderabad` $\rightarrow$ **Telangana**, `Chennai` $\rightarrow$ **Tamil Nadu**, `Kolkata` $\rightarrow$ **West Bengal**, `Ahmedabad` $\rightarrow$ **Gujarat**).
+- **7-Day Weekly Location Forecasting**: Generates 7-day daily forecast breakdown matrices for any searched location, computing daily expected kWh, peak kW capacity, solar potential rating %, and estimated revenue ($\text{₹}$) evaluated at $\text{₹}8.0/\text{kWh}$.
 - **Open-Meteo Fallback**: Uses population-weighted sorting for unlisted geocoding queries to ensure major population centers are selected over small rural villages with identical names.
 
-### 6.2 Visual Design System (`frontend/src/App.tsx`)
+### 6.2 Visual Design System & Interactive Forecast Views (`frontend/src/App.tsx`)
 - **Color Palette**: Solar Golden Amber (`amber-400` / `hover:amber-300`) with high-contrast text (`text-zinc-950`).
+- **Interactive Forecast View Switcher**: Toggles seamlessly between:
+  1. **7-Day Weekly Forecast & Outlook**: Bar/Line composite chart comparing daily expected generation ($\text{kWh}$) and peak noon power ($\text{kW}$), paired with a 7-day daily forecast & revenue matrix and 7-day summary card.
+  2. **Today Intraday Curve & Telemetry Matrix**: 4 intraday quick metric cards (*Peak Irradiance*, *Optimal Window*, *Daytime Temp*, *Cloud Attenuation*), dual-axis power & cloud cover overlay chart, and a daylight hourly telemetry matrix table (06:00 to 18:00).
 - **Layout Integrity**: Rock-solid zero-shake container (`h-screen overflow-hidden` root layout with dedicated internal scrolling canvas).
 - **Typography & Components**: Proportional KPI numbers (`text-2xl font-bold`), single-line card titles, and clean white sidebar (`bg-white border-r border-zinc-200`).
