@@ -30,3 +30,10 @@
 - [x] Implement `src/explain.py` for TreeSHAP analysis on XGBoost predictions in `notebooks/05_shap_analysis.ipynb`
 - [x] Implement `src/economics.py` for kWh energy loss and ₹ financial loss evaluation in `notebooks/06_economic_analysis.ipynb`
 - [x] Generate detailed predictions & economic loss report (`results/predictions/predictions.csv`)
+
+## Phase 6: Web Analytics Dashboard & REST API
+- [x] Implement FastAPI server (`api/main.py`) serving live telemetry overview, predictions, anomalies, SHAP features & tech benchmarks
+- [x] Build React + Vite web application (`frontend/src/App.tsx`) with interactive tabbed navigation
+- [x] Integrate live **Model Selector** dropdown for toggling between XGBoost Regressor and Random Forest Regressor with real-time curve overlay
+- [x] Refine UI typography, font sizing, and plain-English terminology for optimal presentation to reviewers
+- [x] Verify production build (`npm run build`)

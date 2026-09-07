@@ -62,10 +62,10 @@ export default function App() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200/80 tracking-wider">NISE INDIA</span>
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight">Solar PV Research Analytics</h1>
+              <span className="text-xs font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200/80 tracking-wider">NISE Solar Plant, India</span>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">Solar Energy Performance Tracker</h1>
             </div>
-            <p className="text-sm text-slate-600 font-medium">Explainable ML Framework for Performance Monitoring & Anomaly Detection</p>
+            <p className="text-sm text-slate-600 font-medium">AI-Powered Solar Monitoring & Power Loss Detector</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ export default function App() {
             }`}
           >
             <LineChartIcon className="w-4.5 h-4.5 text-blue-600" />
-            Performance & Models
+            Model Performance
           </button>
 
           <button
@@ -98,7 +98,7 @@ export default function App() {
             }`}
           >
             <AlertTriangle className="w-4.5 h-4.5 text-amber-600" />
-            Anomaly Monitor
+            Issue Detector
           </button>
 
           <button
@@ -108,7 +108,7 @@ export default function App() {
             }`}
           >
             <BrainCircuit className="w-4.5 h-4.5 text-indigo-600" />
-            XAI & Tech Benchmark
+            AI Explanation & Panel Comparison
           </button>
         </nav>
       </header>
@@ -123,47 +123,47 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-2 shadow-xs hover:shadow-md transition-all border-t-2 border-t-emerald-500">
                 <div className="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                  <span>Performance Ratio</span>
+                  <span>Plant Efficiency</span>
                   <Activity className="w-4 h-4 text-emerald-600" />
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{overview?.performance_ratio_pct || '65.9'}%</div>
-                <p className="text-xs text-slate-500 font-medium">Actual vs Expected Power</p>
+                <p className="text-xs text-slate-500 font-medium">Real vs. Expected Power Output</p>
               </div>
 
               <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-2 shadow-xs hover:shadow-md transition-all border-t-2 border-t-amber-500">
                 <div className="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                  <span>Avg Actual Power</span>
+                  <span>Avg Power Generated</span>
                   <Zap className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{overview?.avg_actual_power_kw || '143.04'} <span className="text-xs font-semibold text-slate-500">kW</span></div>
-                <p className="text-xs text-slate-500 font-medium">Mean 10-min AC Output</p>
+                <p className="text-xs text-slate-500 font-medium">Average 10-min Solar Generation</p>
               </div>
 
               <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-2 shadow-xs hover:shadow-md transition-all border-t-2 border-t-amber-600">
                 <div className="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                  <span>Persistent Events</span>
+                  <span>Confirmed Issues</span>
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{overview?.persistent_anomalies_count || '14'}</div>
-                <p className="text-xs text-slate-500 font-medium">40-min rolling anomalies</p>
+                <p className="text-xs text-slate-500 font-medium">Power drops lasting 40+ minutes</p>
               </div>
 
               <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-2 shadow-xs hover:shadow-md transition-all border-t-2 border-t-slate-700">
                 <div className="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                  <span>Energy Deficit</span>
+                  <span>Total Energy Lost</span>
                   <Clock className="w-4 h-4 text-slate-600" />
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{overview?.total_energy_loss_kwh || '1,041.01'} <span className="text-xs font-semibold text-slate-500">kWh</span></div>
-                <p className="text-xs text-slate-500 font-medium">Cumulative energy loss</p>
+                <p className="text-xs text-slate-500 font-medium">Cumulative generation loss</p>
               </div>
 
               <div className="bg-white border border-slate-200/90 rounded-xl p-5 space-y-2 shadow-xs hover:shadow-md transition-all border-t-2 border-t-blue-600">
                 <div className="flex items-center justify-between text-slate-500 text-xs font-semibold uppercase tracking-wider">
-                  <span>Financial Impact</span>
+                  <span>Estimated Money Lost</span>
                   <IndianRupee className="w-4 h-4 text-blue-600" />
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 tracking-tight">₹{overview?.total_financial_loss_inr?.toLocaleString() || '8,328.08'}</div>
-                <p className="text-xs text-slate-500 font-medium">Tariff @ ₹8.0/kWh</p>
+                <p className="text-xs text-slate-500 font-medium">Estimated @ ₹8.0 per kWh</p>
               </div>
             </div>
 
@@ -172,18 +172,18 @@ export default function App() {
               <div className="space-y-1.5 max-w-3xl">
                 <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  Primary Dataset: National Institute of Solar Energy (NISE), India
+                  Solar Plant Data Source: National Institute of Solar Energy (NISE), Gurgaon, India
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                  Real operational telemetry from 14 photovoltaic technologies and string inverter blocks in Gurgaon, Haryana, India. Analyzed across 1,028 timesteps at 10-minute intervals (June 21–27, 2026).
+                  Real operational power data collected every 10 minutes across 14 solar panel technologies (June 21–27, 2026).
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3.5 text-sm font-mono text-slate-700 bg-slate-50 px-4.5 py-3 rounded-lg border border-slate-200">
-                <span>Frequency: <strong className="text-slate-900 font-sans font-bold">10-Min</strong></span>
+                <span>Interval: <strong className="text-slate-900 font-sans font-bold">10-Min</strong></span>
                 <span className="text-slate-300">|</span>
                 <span>Technologies: <strong className="text-slate-900 font-sans font-bold">14 Systems</strong></span>
                 <span className="text-slate-300">|</span>
-                <span>Irradiance: <strong className="text-slate-900 font-sans font-bold">500 kW Sensor</strong></span>
+                <span>Sunlight Sensor: <strong className="text-slate-900 font-sans font-bold">500 kW Sensor</strong></span>
               </div>
             </div>
 
@@ -191,10 +191,10 @@ export default function App() {
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Actual vs. ML Expected Solar Power Output</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">Time-series power generation telemetry (kW) on NISE plant</p>
+                  <h3 className="text-base font-bold text-slate-900">Real Power Output vs. AI Expected Power</h3>
+                  <p className="text-xs text-slate-500 mt-0.5 font-medium">Comparing real electricity produced (kW) against what the AI model expected.</p>
                 </div>
-                <span className="text-xs font-mono font-medium px-3 py-1 rounded bg-slate-50 text-slate-700 border border-slate-200">10-Minute Intervals</span>
+                <span className="text-xs font-mono font-semibold px-3 py-1 rounded bg-slate-50 text-slate-700 border border-slate-200">10-Minute Readings</span>
               </div>
               <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -204,8 +204,8 @@ export default function App() {
                     <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
                     <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', color: '#0f172a', borderRadius: '8px', fontSize: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)' }} />
                     <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                    <Line type="monotone" dataKey="actual_power_kw" name="Actual AC Power (kW)" stroke="#0f172a" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="expected_power_kw" name="Model Expected Power (kW)" stroke="#d97706" strokeWidth={1.8} strokeDasharray="4 4" dot={false} />
+                    <Line type="monotone" dataKey="actual_power_kw" name="Real Power (kW)" stroke="#0f172a" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="expected_power_kw" name="AI Expected Power (kW)" stroke="#d97706" strokeWidth={1.8} strokeDasharray="4 4" dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -220,7 +220,7 @@ export default function App() {
             <div className="bg-white border border-slate-200/90 rounded-xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-xs">
               <div className="flex items-center gap-3">
                 <Sliders className="w-4.5 h-4.5 text-slate-600" />
-                <label className="text-sm font-bold text-slate-800">Model Selector:</label>
+                <label className="text-sm font-bold text-slate-800">Choose AI Model:</label>
                 <select
                   value={selectedModel}
                   onChange={e => setSelectedModel(e.target.value)}
@@ -232,14 +232,14 @@ export default function App() {
               </div>
 
               <div className="text-sm text-slate-600 font-mono font-medium">
-                Dataset Split: <span className="text-slate-900 font-bold font-sans">Chronological 80/20 Time-Series</span>
+                Test Setup: <span className="text-slate-900 font-bold font-sans">80% Training Data / 20% Testing Data</span>
               </div>
             </div>
 
             {/* Metrics Table */}
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900">Model Evaluation Metrics Comparison</h3>
+                <h3 className="text-lg font-bold text-slate-900">AI Model Accuracy Comparison</h3>
                 <span className="text-xs font-mono font-semibold px-3 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200">
                   Active Model: {selectedModel}
                 </span>
@@ -248,11 +248,11 @@ export default function App() {
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200 text-slate-600 font-bold text-xs uppercase tracking-wider">
-                      <th className="py-3.5 px-4">Regression Model</th>
-                      <th className="py-3.5 px-4">MAE (kW)</th>
-                      <th className="py-3.5 px-4">RMSE (kW)</th>
-                      <th className="py-3.5 px-4">R² Score</th>
-                      <th className="py-3.5 px-4">Selection Status</th>
+                      <th className="py-3.5 px-4">AI Model</th>
+                      <th className="py-3.5 px-4">Average Error (MAE)</th>
+                      <th className="py-3.5 px-4">Total Error (RMSE)</th>
+                      <th className="py-3.5 px-4">Accuracy Score (R²)</th>
+                      <th className="py-3.5 px-4">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -265,8 +265,8 @@ export default function App() {
                             <Layers className={`w-4.5 h-4.5 ${isSelected ? 'text-amber-600' : 'text-slate-400'}`} />
                             {m.Model}
                           </td>
-                          <td className="py-4 px-4 font-mono text-slate-700 text-sm">{m.MAE}</td>
-                          <td className="py-4 px-4 font-mono text-slate-700 text-sm">{m.RMSE}</td>
+                          <td className="py-4 px-4 font-mono text-slate-700 text-sm">{m.MAE} kW</td>
+                          <td className="py-4 px-4 font-mono text-slate-700 text-sm">{m.RMSE} kW</td>
                           <td className="py-4 px-4 font-mono font-extrabold text-slate-900 text-base">{m.R2}</td>
                           <td className="py-4 px-4">
                             <span className={`text-xs font-bold px-3 py-1 rounded-md border ${
@@ -274,7 +274,7 @@ export default function App() {
                                 ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs' 
                                 : 'bg-slate-100 text-slate-600 border-slate-200'
                             }`}>
-                              {isSelected ? 'Active Model' : 'Baseline'}
+                              {isSelected ? 'Active Model' : 'Comparison Model'}
                             </span>
                           </td>
                         </tr>
@@ -289,8 +289,8 @@ export default function App() {
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Actual vs. Model Predicted Generation Curve</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 font-medium">Time-series power generation telemetry (kW) vs. {selectedModel} Expected Model Curve</p>
+                  <h3 className="text-base font-bold text-slate-900">Real Power Output vs. Selected AI Model Forecast</h3>
+                  <p className="text-xs text-slate-500 mt-0.5 font-medium">Showing real power output (black) vs. expected power calculated by {selectedModel}.</p>
                 </div>
                 <span className="text-xs font-mono font-semibold px-3 py-1 rounded bg-slate-50 text-slate-700 border border-slate-200">10-Minute Telemetry</span>
               </div>
@@ -302,7 +302,7 @@ export default function App() {
                     <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
                     <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', color: '#0f172a', borderRadius: '8px', fontSize: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.08)' }} />
                     <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                    <Line type="monotone" dataKey="actual_power_kw" name="Actual Power (kW)" stroke="#0f172a" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="actual_power_kw" name="Real Power (kW)" stroke="#0f172a" strokeWidth={2} dot={false} />
                     <Line 
                       type="monotone" 
                       dataKey="expected_power_kw" 
@@ -324,26 +324,26 @@ export default function App() {
           <div className="space-y-6">
             {/* Flowchart Architecture */}
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
-              <h3 className="text-base font-bold text-slate-900">Physics-Informed Anomaly Detection Pipeline</h3>
+              <h3 className="text-base font-bold text-slate-900">How Issues Are Detected (4-Step Process)</h3>
               <div className="grid grid-cols-1 md:grid-cols-7 gap-2 items-center text-center text-xs font-medium">
                 <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-slate-800 shadow-2xs">
                   <div className="text-slate-500 text-[10px] font-mono font-semibold uppercase">Step 1</div>
-                  <div className="font-bold mt-1 text-sm text-slate-900">Actual Telemetry</div>
+                  <div className="font-bold mt-1 text-sm text-slate-900">Live Solar Data</div>
                 </div>
                 <ChevronRight className="w-4 h-4 mx-auto text-slate-400 hidden md:block" />
                 <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-slate-800 shadow-2xs">
                   <div className="text-slate-500 text-[10px] font-mono font-semibold uppercase">Step 2</div>
-                  <div className="font-bold mt-1 text-sm text-slate-900">XGBoost Model</div>
+                  <div className="font-bold mt-1 text-sm text-slate-900">AI Model Prediction</div>
                 </div>
                 <ChevronRight className="w-4 h-4 mx-auto text-slate-400 hidden md:block" />
                 <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-slate-800 shadow-2xs">
                   <div className="text-slate-500 text-[10px] font-mono font-semibold uppercase">Step 3</div>
-                  <div className="font-bold mt-1 text-sm text-slate-900">Expected Power</div>
+                  <div className="font-bold mt-1 text-sm text-slate-900">Power Drop Check</div>
                 </div>
                 <ChevronRight className="w-4 h-4 mx-auto text-slate-400 hidden md:block" />
                 <div className="bg-amber-50 border border-amber-200 p-3.5 rounded-xl text-amber-900 shadow-2xs">
                   <div className="text-amber-700 text-[10px] font-mono font-semibold uppercase">Step 4</div>
-                  <div className="font-bold mt-1 text-sm text-amber-950">40-Min Persistence</div>
+                  <div className="font-bold mt-1 text-sm text-amber-950">40-Min Filter</div>
                 </div>
               </div>
             </div>
@@ -352,11 +352,11 @@ export default function App() {
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-5 shadow-xs">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Persistent Anomalous Periods</h3>
-                  <p className="text-xs text-slate-500 mt-0.5 font-medium">40-minute window filtering (suppresses transient cloud flags by 50%)</p>
+                  <h3 className="text-base font-bold text-slate-900">Confirmed Solar Power Drops</h3>
+                  <p className="text-xs text-slate-500 mt-0.5 font-medium">Filters out short cloud shadows by checking if power drop lasts for 40+ minutes.</p>
                 </div>
                 <span className="text-xs font-bold px-3.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200/80">
-                  {anomalies?.total_persistent_events || 14} Events Detected
+                  {anomalies?.total_persistent_events || 14} Confirmed Issues
                 </span>
               </div>
 
@@ -377,18 +377,18 @@ export default function App() {
                         <span className="font-extrabold text-slate-900 text-base">{ev.expected_power_kw} kW</span>
                       </div>
                       <div className="space-y-1">
-                        <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Actual Output</span>
+                        <span className="text-slate-500 block text-[11px] font-semibold uppercase tracking-wider">Real Power Output</span>
                         <span className="font-extrabold text-amber-800 text-base">{ev.actual_power_kw} kW</span>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs pt-0.5">
                       <div>
-                        <span className="text-slate-500 block text-[11px] font-medium">Deficit</span>
+                        <span className="text-slate-500 block text-[11px] font-medium">Energy Lost</span>
                         <span className="font-bold text-slate-800">{ev.energy_loss_kwh} kWh</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-[11px] font-medium">Financial Impact</span>
+                        <span className="text-slate-500 block text-[11px] font-medium">Estimated Money Lost</span>
                         <span className="font-bold text-slate-900">₹{ev.financial_loss_inr}</span>
                       </div>
                     </div>
@@ -405,8 +405,8 @@ export default function App() {
             {/* SHAP Feature Importance Chart */}
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
               <div>
-                <h3 className="text-lg font-bold text-slate-900">TreeSHAP Feature Attributions</h3>
-                <p className="text-sm text-slate-600 mt-0.5 font-medium">Quantifies feature influence on expected solar AC power generation</p>
+                <h3 className="text-lg font-bold text-slate-900">What Drives AI Power Predictions? (Key Factors)</h3>
+                <p className="text-sm text-slate-600 mt-0.5 font-medium">Ranking the key environmental factors that most influence expected solar output.</p>
               </div>
 
               <div className="h-80 w-full">
@@ -425,19 +425,19 @@ export default function App() {
             {/* NISE 14 Technology Benchmark Table */}
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 space-y-4 shadow-xs">
               <div>
-                <h3 className="text-lg font-bold text-slate-900">Technology Performance Benchmark (14 NISE Subsystems)</h3>
-                <p className="text-sm text-slate-600 mt-0.5 font-medium">Comparative Performance Ratio across Solar Photovoltaic Technologies under Indian Operating Conditions</p>
+                <h3 className="text-lg font-bold text-slate-900">Solar Panel Technology Performance Ranking (14 Types)</h3>
+                <p className="text-sm text-slate-600 mt-0.5 font-medium">Comparing real efficiency across 14 solar panel technologies tested at NISE, Gurgaon.</p>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200 text-slate-600 font-bold text-xs uppercase tracking-wider">
-                      <th className="py-3.5 px-4">PV Technology</th>
-                      <th className="py-3.5 px-4">Category</th>
-                      <th className="py-3.5 px-4">Inverter Specs</th>
-                      <th className="py-3.5 px-4">Capacity (kWp)</th>
-                      <th className="py-3.5 px-4">Performance Ratio %</th>
+                      <th className="py-3.5 px-4">Solar Panel System</th>
+                      <th className="py-3.5 px-4">Technology Type</th>
+                      <th className="py-3.5 px-4">Inverter Model</th>
+                      <th className="py-3.5 px-4">System Size (kWp)</th>
+                      <th className="py-3.5 px-4">Efficiency Rate (%)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -461,6 +461,3 @@ export default function App() {
     </div>
   );
 }
-
-
-

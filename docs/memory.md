@@ -33,14 +33,21 @@
 ## Directory & File Registry
 ```text
 solar-pv-ai/
+├── api/
+│   └── main.py (FastAPI REST Backend)
 ├── data/
 │   ├── raw/nise/Inverter Report.xlsx
 │   └── processed/cleaned_data.csv
 ├── docs/
 │   ├── PRD.md (Locked Scope & Tariff Matrix)
-│   ├── tasks.md (Completed)
+│   ├── tasks.md (Completed through Phase 6)
 │   ├── memory.md (Updated)
-│   └── tech_stack.md (System Python)
+│   └── tech_stack.md (System Python + Node.js)
+├── frontend/
+│   ├── src/App.tsx (React Web Dashboard UI)
+│   ├── index.html
+│   ├── dist/ (Production build bundle)
+│   └── vite.config.ts
 ├── notebooks/
 │   ├── 01_data_inspection.ipynb (Verified)
 │   ├── 02_data_cleaning_eda.ipynb (Verified)

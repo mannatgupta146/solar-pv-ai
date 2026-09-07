@@ -196,12 +196,12 @@ def get_explainability():
     Returns SHAP feature importance summary data.
     """
     feature_importance = [
-        {"feature": "Solar Irradiance (RADIATION 500 KW)", "importance": 0.5842, "description": "Primary solar input driver"},
-        {"feature": "Solar Noon Proximity", "importance": 0.1931, "description": "Proxy for solar elevation angle"},
-        {"feature": "Hour of Day (cos_hour)", "importance": 0.0915, "description": "Diurnal cycle constraint"},
-        {"feature": "Irradiance Lag (10-min)", "importance": 0.0642, "description": "Short-term cloud momentum"},
-        {"feature": "30-min Rolling Mean Irradiance", "importance": 0.0410, "description": "Smoothed irradiance trend"},
-        {"feature": "Day of Year", "importance": 0.0260, "description": "Seasonal sun position"}
+        {"feature": "Sunlight Level (500 kW Sensor)", "importance": 0.5842, "description": "Amount of sunlight falling on panels"},
+        {"feature": "Midday Peak Time", "importance": 0.1931, "description": "How close the time is to peak noon sun"},
+        {"feature": "Time of Day Cycle", "importance": 0.0915, "description": "Natural sun movement across the day"},
+        {"feature": "Previous 10-Min Sunlight", "importance": 0.0642, "description": "Recent cloud shadow movement"},
+        {"feature": "30-Min Sunlight Trend", "importance": 0.0410, "description": "Average light intensity over 30 minutes"},
+        {"feature": "Season of Year", "importance": 0.0260, "description": "Sun angle change across seasons"}
     ]
 
     return {
